@@ -9,6 +9,7 @@
 # - Installing and configuring Git
 # - Installing Visual Studio Code and extensions
 # - Installing Docker, Bitwarden, Chrome, and Firefox
+# - Installing ASDF for runtime management
 # - Adding useful terminal functions via myfunctions.sh
 # - Creating a Projects directory
 # -------------------------------------------------------
@@ -135,6 +136,46 @@ create_projects_directory() {
     fi
 }
 
+# Function to install ASDF
+install_asdf() {
+    echo "🔧 Installing ASDF..."
+    if ! command -v asdf &>/dev/null; then
+        brew install asdf || error_exit "ASDF installation failed."
+    else
+        echo "✅ ASDF is already installed."
+    fi
+
+    # Add ASDF to shell configuration
+    if ! grep -q 'source "$(brew --prefix asdf)/asdf.sh"' ~/.zshrc; then
+        echo 'source "$(brew --prefix asdf)/asdf.sh"' >> ~/.zshrc
+        echo 'source "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"' >> ~/.zshrc
+        source ~/.zshrc || error_exit "Failed to source ASDF in ~/.zshrc."
+    fi
+}
+
+# Function to install ASDF plugins for Python and Go
+install_asdf_plugins() {
+    echo "🔌 Adding ASDF plugins for Python and Go..."
+
+    # Install Python plugin
+    if ! asdf plugin-list | grep -q "python"; then
+        asdf plugin-add python || error_exit "Failed to add Python plugin."
+    fi
+    echo "📦 Installing latest Python version..."
+    asdf install python latest
+    asdf global python latest
+
+    # Install Go plugin
+    if ! asdf plugin-list | grep -q "golang"; then
+        asdf plugin-add golang || error_exit "Failed to add Go plugin."
+    fi
+    echo "📦 Installing latest Go version..."
+    asdf install golang latest
+    asdf global golang latest
+
+    echo "✅ ASDF plugins for Python and Go installed successfully."
+}
+
 # -------------------------
 # Execution of the Setup
 # -------------------------
@@ -150,6 +191,8 @@ install_cask_app "firefox"
 install_cask_app "google-chrome"
 install_brew_package "bitwarden"
 install_brew_package "docker"
+install_asdf
+install_asdf_plugins
 install_vscode_extensions
 create_projects_directory
 
