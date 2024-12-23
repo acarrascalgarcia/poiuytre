@@ -7,7 +7,7 @@
 # on macOS, including:
 # - Installing Homebrew
 # - Installing and configuring Git
-# - Installing applications (VS Code, Chrome, Firefox, Bitwarden, Docker, iTerm2)
+# - Installing applications (VS Code, Chrome, Firefox, Bitwarden, Docker, iTerm2, Spotify, Steam)
 # - Installing ASDF for runtime management (Python and Go)
 # - Installing VS Code extensions
 # - Adding useful terminal functions via myfunctions.sh
@@ -179,6 +179,8 @@ install_cask_app "google-chrome"
 install_cask_app "firefox"
 install_cask_app "bitwarden"
 install_cask_app "iterm2"
+install_cask_app "spotify"
+install_cask_app "steam"
 install_brew_package "docker"
 install_asdf
 install_asdf_plugins
